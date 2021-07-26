@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>员工管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+<!--    <link rel="shortcut icon" href="images/logo.jpg">-->
+    <link href="/static/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="/static/css/layui.css" rel="stylesheet">
+
+    <style type="text/css">
+    body{
+    font-size: 14px;
+    text-align: center;
+    }
+    </style>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<script>
+function changePage()
+{
+    window.location.href="{% url 'addPerson'%}"; //2.当前页面打开URL页面
+}
+function query()
+{
+    var data = $('#top-search').val();
+    window.location.href="{% url 'query'%}?option=1&query="+data;
+}
+</script>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-6" style="width:100%;">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                    <span style="float:left;">领军人才管理</span>
+                        <div class="ibox-tools"  style="margin-bottom:5px;">
+                            <div style="float:left">
+                                <input type="text" placeholder="输入查找的内容" class="form-control" name="top-search" id="top-search">
+                            </div>
+                            <button style=""type="button" class="btn btn-w-m btn-info" onClick="query()">查询</button>
+                            <button type="button" class="btn btn-w-m btn-info" onClick="changePage()">添加人员</button>
+
+
+                        </div>
+                    </div>
+                    <div id = "main_leader" class="ibox-content">
+                        <table class="table table-bordered table-hover" width="800px" style="text-align:center;">
+							<thead align="center">
+                                <tr>
+                                        <td style="text-align:center;">序号</td>
+                                        <td style="text-align:center;">学者姓名</td>
+                                        <td style="text-align:center;">工作单位
+                                            <select id = "select_" onchange="select_func(this.value)">
+                                                <option>All School</option>
+                                              </select>
+                                        </td >
+                                        <td style="text-align:center;">学科</td>
+                                        <td style="text-align:center;">操作</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr v-for="(r,index) in data">
+                                        <td width="10%">[[index+1]]</td>
+                                        <td width="10%">[[r.lead_name]]</td>
+                                        <td width="10%">[[r.college_name]]</td>
+                                        <td width="40%">[[r.subject_name]]</td>
+                                        <td width="20%">
+                                            <a class="btn btn-success btn-rounded" :href="'/country/updatePerson/?option=1&update_id='+[[r.id]]" type = "button">修改</a>
+                                            <a class="btn btn-danger btn-rounded" :href="'/country/delPerson/?option=1&delete_id='+[[r.id]]" type = "button">删除</a>
+                                        </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+
+<script>
+    var g_data = new Array();
+
+    //定义全局变量
+    var vt = new Vue({
+                    delimiters:['[[',']]'],
+                    el: '#main_leader',
+                    data: {
+                            data: g_data,
+                    },
+                    created: function()
+                    {
+                        var arr = this;
+                        arr.data = g_data;
+                    },
+                    methods:{
+                        addData:function(data)
+                        {
+                            for(var i = 0; i < data.length; i++)
+                            {
+                                 this.data.push(data[i]);
+                            }
+                        },
+                        deleteAllData:function()
+                        {
+                            this.data = [];
+                        }
+                    }
+
+    });
+    $(document).ready(function () {
+        var data = {{data | safe}};
+        //console.log(data);
+        for(var i=0; i<data.length; i++){
+                        var ele = data[i];
+                        g_data.push(ele);
+                }
+        set_combobox(g_data);
+    });
+    function select_func(val) {
+            var data = [];
+            if(val == "All School")
+            {
+                vt.deleteAllData();
+                vt.addData(g_data);
+            }
+            else{
+                for(var i=0; i<g_data.length; i++){
+                        var ele = g_data[i];
+                        if(ele.college_name == val){
+                            data.push(ele);
+                    }
+                }
+                vt.deleteAllData();
+                vt.addData(data);
+            }
+        }
+
+        function set_combobox(result){
+            //设置工作单位的下拉列表
+            var work_units = new Array();
+            //为数组添加不重复元素添加的方法
+            Array.prototype.pushNoRepeat = function(){
+                for(var i=0; i<arguments.length; i++){
+                    var ele = arguments[i];
+                    if(this.indexOf(ele) == -1){
+                        this.push(ele);
+                    }
+                }
+            };
+            for(var i=0; i<result.length; i++){
+                    var ele = result[i];
+                    work_units.pushNoRepeat(ele.college_name);
+            }
+
+            work_units.sort(function(a,b){
+                return a.localeCompare(b);
+            });
+            //创建option
+            for(var i=0; i<work_units.length; i++){
+                    var ele = work_units[i];
+                    var y=document.createElement('option');
+                    y.text=ele;
+                    var x=document.getElementById("select_");
+                    try
+                    {
+                        x.add(y,null); // standards compliant
+                    }
+                    catch(ex)
+                    {
+                        x.add(y); // IE only
+                    }
+            }
+    }
+
+</script>
+

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加学科</title>
+    <link rel="shortcut icon" href="images/logo.jpg">
+    <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+	<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+	<script src="plugins/cover_js/iscroll-zoom.js" type="text/javascript" charset="utf-8"></script>
+	<script src="plugins/cover_js/hammer.js" type="text/javascript" charset="utf-8"></script>
+	<script src="plugins/cover_js/lrz.all.bundle.js" type="text/javascript" charset="utf-8"></script>
+	<script src="plugins/cover_js/jquery.photoClip.min.js" type="text/javascript" charset="utf-8"></script>
+
+</head>
+
+<script>
+function saveLeader()
+{
+    var country=document.getElementById('info_country').value;
+    var college=document.getElementById('info_college').value;
+    var collegeE=document.getElementById('info_collegeE').value;
+    var research=document.getElementById('info_research').value;
+}
+</script>
+
+<body class="gray-bg">
+			<div class="col-sm-6" style="width:100%;">
+                <div class="ibox float-e-margins" style="width:60%;margin:0 auto;">
+                    <div class="ibox-title" >
+                        <h4 style="font-size:20px;color:#23b7e5;">更改学科信息</h4>
+                        <div class="fa-hover col-md-3 col-sm-4" style="font-size:20px;width:120px;float:right;margin-right:0px;"><a class="back" onClick="javascript :history.back(-1);" style="color:#23B7E5" href="javascript:void(0)">返回 </a></div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-horizontal">
+							<form action="/country/updatesubjects/" method="post" name="myform" enctype="multipart/form-data">
+                                {%csrf_token%}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">id(不可更改)：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="id" id="info_id"class="form-control" readonly="readonly">
+                                    <span class="help-block m-b-none"></span>
+                                </div>
+                            </div>
+							<div class="form-group">
+                                <label class="col-sm-3 control-label">高校名称：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="college" id="info_college" placeholder="名称" class="form-control">
+                                    <span class="help-block m-b-none"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">高校名称(英)：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="collegeE" id="info_collegeE" placeholder="高校名称（英）" class="form-control">
+                                    <span class="help-block m-b-none"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">国家：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="country" id="info_country" placeholder="国家" class="form-control">
+                                    <span class="help-block m-b-none"></span>
+                                </div>
+                            </div>
+
+
+							<div class="form-group">
+                                <label class="col-sm-3 control-label">学科名称：</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="research" id="info_research" placeholder="学科名称" class="form-control">
+                                    <span class="help-block m-b-none"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-8">
+                                    <button type="submit" class="btn btn-sm btn-info" onClick="saveLeader()">更新</button>
+                                </div>
+                            </div>
+
+                            </form>
+<!--                            <div class="form-group">-->
+<!--                                <div class="col-sm-offset-3 col-sm-8">-->
+<!--                                    <button class="btn btn-sm btn-info" onClick="saveLeader()">保 存</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+</body>
+<script>
+    var data = {{data|safe}};
+    data = data[0];
+    $('#info_id').val(data.id);
+    $('#info_country').val(data.cname);
+    $('#info_college').val(data.college_name);
+     $('#info_research').val(data.subject_name);
+</script>

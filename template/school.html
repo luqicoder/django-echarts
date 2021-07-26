@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <title>学校</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+
+    </script>
+</head>
+
+<body>
+    <div id="main">
+    <div  align="center">
+        <h1 id="con">1</h1>
+        <p>学校统计表</p>
+
+        <table border=1 class="table table-bordered table-striped">
+            <tr>
+                <td>序号</td>
+                <td>学校</td>
+                <td>合计</td>
+                <td>领军人才</td>
+                <td>青年人才</td>
+                <td>是否一流学科</td>
+            </tr>
+            <tr v-for="(r,index) in colleges">
+                <td>[[index+1]]</td>
+                <td><a :href="'/country/school_detail/?id='+[[r.college_name]]+'&subject='+{{subject|safe}}[0]">[[r.college_name]]</a></td>
+                <td>[[r.lead_num+r.young_num]]</td>
+                <td>[[r.lead_num]]</td>
+                <td>[[r.young_num]]</td>
+                <td>[[r.is_first]]</td>
+            </tr>
+<!--             {% for i0 in cou1 %}-->
+<!--            <tr>-->
+<!--                <td>{{forloop.counter}}</td>-->
+<!--                <td>{{i0.lead_name}}</td>-->
+<!--                <td>{{i0.college_name}}</td>-->
+<!--                <td>{{i0.field_name}}</td>-->
+<!--            </tr>-->
+<!--            {% endfor %}-->
+        </table>
+    </div>
+    </div>
+</body>
+<script>
+var data = {{data | safe}};
+var subject = {{subject|safe}}[0];         ;
+document.getElementById("con").innerHTML =subject;
+data.sort(function(a, b){return (b.lead_num+b.young_num) - (a.lead_num+a.young_num)});
+    var vt = new Vue({
+                    delimiters:['[[',']]'],
+                    el: '#main',
+                    data: {
+                            colleges: data,
+                    }
+    });
+
+</script>
+
+</html>

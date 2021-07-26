@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+        <tr>
+        <th>国家</th>
+        <th>高校数量</th>
+        <th>领军人才数量</th>
+        <th>青年人才数量</th>
+        </tr>
+
+        {% for i in out %}
+                <tr>
+
+                   <td>{{i.c_name}}</td>
+                   <td>{{i.value_num}}</td>
+                   <td>{{i.lead_num}}</td>
+                   <td>{{i.young_num}}</td>
+                </tr>
+        {% endfor %}
+        </table>
+</body>
+</html>

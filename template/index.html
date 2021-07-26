@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+ 
+<head>
+
+    <meta charset="utf-8">
+    <title>全球人才分布图</title>
+    <style type="text/css">
+        /* #mapBox{
+            top: 100px;
+        } */
+        #top{
+            background-color: #FCF1E0;
+            color:rgb(207, 93, 93);
+            font-size: 15px;
+            font-weight: bold;
+        }
+        p.in {
+            text-align: left;
+            margin-bottom: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: brown;
+        }
+        p.z{
+            margin-top: 0px;
+        }
+        .inner{
+            float: left;
+            display: inline;
+            margin-left: 4.5%;
+        }
+        ul{
+            font: 20px;
+            color: orange;
+            font-weight: bold;
+            margin: 0px;
+        }
+        li{
+            margin-left: 0px;
+        }
+        font{
+            font: 40px;
+            font-weight: bold;
+            color: peru;
+        }
+    </style>
+</head>
+ 
+    <body style="height: 100%; margin: 0">
+    <div id = "top" style="height: 15%;margin: 0">
+        <div class = "inner">
+            <p class="in"  id = "id0"><br /></p>
+            <p class = "z" id="z0"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id1"><br /></p>
+            <p class = "z" id="z1"></p>
+        </div>
+        <div class = "inner">
+            <p class="in"  id = "id2"><br /></p>
+            <p class = "z" id="z2"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id3"><br /></p>
+            <p class = "z" id="z3"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id4"><br /></p>
+            <p class = "z" id="z4"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id5"><br /></p>
+            <p class = "z" id="z5"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id6"><br /></p>
+            <p class = "z" id="z6"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id7"><br /></p>
+            <p class = "z" id="z7"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id8"><br /></p>
+            <p class = "z" id="z8"></p>
+        </div>
+        <div class = "inner" >
+            <p class="in" id = "id9"><br /></p>
+            <p class = "z" id="z9"></p>
+        </div>
+    
+    </div>
+    <div id="mapBox" class="centerItem" style="height: 85%"></div>
+ 
+    <!-- 引入相关文件 -->
+    <script src="https://s1.pstatp.com/cdn/expire-1-M/jquery/3.2.1/jquery.js" type="application/javascript"></script>
+    <script src="/static/dist/echarts.js"></script>
+    <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=W9XolWTovrDuY776QexRSup5sFPge87W&__ec_v__=20190126"></script>
+    <script src="/static/dist/map/js/world_2.js"></script>
+    <script>
+        function my_link() {
+                var windowTop = (window.screen.height-300)/2;
+                var windowSide = (window.screen.width-400)/2;
+                var windeowparameter = 'height=300, width=400, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no';
+                windeowparameter += ','+'top='+windowTop;
+                windeowparameter +=','+'left='+windowSide;
+                window.open("{% url 'sub_select_subject'%}", 'new', windeowparameter);
+                //window.open("{% url 'sub_select_subject'%}", 'new', 'location=no, toolbar=no');
+                //window.location.href="{% url 'school'%}?id="+city;
+            }
+        // 基于准备好的dom，初始化echarts实例
+        var mapBoxEchart = echarts.init(document.getElementById('mapBox'));
+ 
+        // 指定相关的配置项和数据
+        var mapBoxOption = {
+            title: {
+                text: '机械工程',
+                link: "javascript: my_link()",
+                target: "self",// 保证不会在新的窗口弹出
+                subtext: '学科及人才分布图',
+                sublink: 'https://www.swjtu.edu.cn/',
+                left: 'center',
+                textStyle: {
+                    fontSize: 50,
+                    color: "rgba(157, 111, 111, 1)",
+                    fontWeight: 'bold'
+                },
+                subtextStyle: {
+                    fontSize: 20,
+                    align: 'right',
+                    fontWeight: 'bold',
+                    fontSize: 30,
+                },
+                left: '20px',
+                bottom: '20px'
+            },
+            tooltip : {
+                //trigger: 'item'
+            },
+            backgroundColor: '#FCF1E0',
+            series: [{
+                type: 'map',
+                map: 'world',
+                aspectScale: 0.75,
+                zoom: 1.2,
+
+                label: {
+                    show: true,
+                    color: "blue",
+                    fontFamily: 'sans-serif',
+                    formatter: function(params){
+                        if(params.data == undefined)
+                            return '';
+                        var name = params.name;
+                        //return name;
+                        var link = "loc.png";
+                        //return "<img src=" + "\"" + link +  "\" " + "/>"
+                        return '{img|}';
+                    },
+                    rich: {
+                        img: {
+                            fontSize: 5,
+                            color: 'rgb(199,86,83)',
+                            backgroundColor: {
+                                image: "/static/loc.png"
+                            },
+                            height: 20,
+                            align: 'top'
+                        },
+                    }
+                },
+                itemStyle: {
+                    borderWidth: .5, //区域边框宽度
+                    borderColor: '#009fe8', //区域边框颜色
+                    areaColor: "#828c97", //地图国家区域颜色
+                },
+                emphasis: {
+                    label : {
+                        show: true,
+                        color: "#800080",
+                        position: [1000, 1000],
+                        offset: [30, 40],
+                        fontSize: 20,
+                        fontStyle: 'normal',
+                        formatter: function(params){
+                            var name = params.name;
+                            return name;
+                        }
+                    },
+                    itemStyle: {
+                        borderWidth: .5,
+                            borderColor: '#4b0082',
+                            areaColor: "#ffdead",
+                    }
+                },
+                tooltip: {
+                    padding: 2,
+                    backgroundColor: 'rgb(238,252,170)',
+                    //formatter:  '{c0}' //    比如'{c0}'等价于'1 2 3'
+                    formatter: function(params){
+                        var val = params.data;
+                        if(val == undefined)
+                            return '';
+                        else{
+                            var val1 = val['value_num']>0?val['value_num']+'所':'无';
+                            var val2 = val['lead_num']>0?val['lead_num']+'位':'无';
+                            var val3 = val['young_num']>0?val['young_num']+'位':'无';
+                            var name = params.c_name;
+                            return "<font>人才分布概况</font>"+'<ul><li>学科数量: ' + val1 + "</li>" + '<li>领军人才: '
+                                    + val2 + "</li>" + '<li>青年人才: ' + val3 + "</li></ul>";
+                        }
+                    }
+                },
+            }],
+            dataRange: {
+                x: '-1000 px', //图例横轴位置
+                y: '-1000 px', //图例纵轴位置
+                splitList: []
+            }, //各省地图颜色；start：值域开始值；end：值域结束值；label：图例名称；color：自定义颜色值；
+            
+        };
+        // 使用制定的配置项和数据显示图表
+        mapBoxEchart.setOption(mapBoxOption);
+            // echart图表自适应
+            window.addEventListener("resize", function() {
+                mapBoxEchart.resize();
+            });
+        //异步加载数据
+        $.get('/static/nameMap.json').done(function (data) {
+            // 填入数据
+            mapBoxEchart.setOption({
+                series: [{
+                    nameMap: data
+                }]
+            });
+            // echart图表自适应
+            window.addEventListener("resize", function() {
+                mapBoxEchart.resize();
+            })
+        });
+        var mapBoxEchart = echarts.init(document.getElementById('mapBox'));
+        //console.log({{out}});
+        mapBoxEchart.setOption({
+                series: [{
+                   data: {{out|safe}}
+               }]
+               });
+            function sortRule(a,b) {
+                return b.value_num-a.value_num; // 如果a>=b，返回自然数，不用交换位置
+            }
+            var data = {{out|safe}};
+            data.sort(sortRule);
+            //console.log(data);
+            for (let index = 0; index < 10; index++) {
+                var id = "id" + index.toString();
+                var id1 = "z" + index.toString();
+                document.getElementById(id).innerHTML=data[index].name;
+                var p = "学科数量：" + data[index].value_num.toString() + "<br>" + "领军人才：" + data[index].lead_num.toString() + "<br>" + "青年人才：" + data[index].young_num.toString();
+                //var p = "高校数量：23" + data[index].value_num + "<br>"
+                //var p = "高校数量：" + data[index].value_num.toString() + "<br>" + "领军人才：" + data[index].lead_num.toString() + "<br>" + "青年人才：" + data[index].young_num.toString();
+                document.getElementById(id1).innerHTML=p;
+            }
+         //设置标题
+         var subject = {{subject|safe}};
+        console.log(subject);
+         mapBoxEchart.setOption({
+                title: [{
+                   text: subject[0]
+               }]
+               });
+        //设置点击事件  
+        mapBoxEchart.on('click', function (params) {
+            var city = params.name;
+            //window.location.href="{% url 'country'%}?id="+city;
+            window.location.href="{% url 'school'%}?id="+city+"&subject="+subject[0];
+            //打印经纬度
+            //console.log(mapBoxEchart.convertFromPixel({ geoIndex: 0 }, [params.event.offsetX, params.event.offsetY]));
+        });
+    </script>
+ 
+</body>
+ 
+</html>

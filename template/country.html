@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ 
+<head>
+    <title>领军人才和青年人才</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>    
+        
+    </script>
+</head>
+ 
+<body>
+    <div id="main">
+    <div  align="center">
+        <p>领军人才表</p>
+
+        <table border=1 class="table table-bordered table-striped">
+            <tr>
+                <td>序号</td>
+                <td>学者姓名</td>
+                <td>工作单位
+                    <select id = "select_leader" onchange="select_func(this.value, 1)">
+                        <option>All School</option>
+                      </select>
+                </td>
+                <td>研究领域或方向</td>
+            </tr>
+            <tr v-for="(r,index) in rows_leader">
+                <td>[[index+1]]</td>
+                <td>[[r.lead_name]]</td>
+                <td>[[r.college_name]]</td>
+                <td>[[r.field_name]]</td>
+            </tr>
+<!--             {% for i0 in cou1 %}-->
+<!--            <tr>-->
+<!--                <td>{{forloop.counter}}</td>-->
+<!--                <td>{{i0.lead_name}}</td>-->
+<!--                <td>{{i0.college_name}}</td>-->
+<!--                <td>{{i0.field_name}}</td>-->
+<!--            </tr>-->
+<!--            {% endfor %}-->
+        </table>
+    </div>
+    <div  align="center">
+        <p>青年人才表</p>
+        <table border=1 class="table table-bordered table-striped">
+            <tr>
+                <td>序号</td>
+                <td>学者姓名</td>
+                <td>工作单位
+                    <select id = "select_young" onchange="select_func(this.value, 2)">
+                        <option>All School</option>
+                      </select>
+                </td>
+                <td>研究领域或方向</td>
+            </tr>
+            <tr v-for="(r,index) in rows_young">
+                <td>[[index+1]]</td>
+                <td>[[r.young_name]]</td>
+                <td>[[r.college_name]]</td>
+                <td>[[r.field_name]]</td>
+            </tr>
+<!--             {% for i1 in cou2 %}-->
+<!--            <tr>-->
+<!--                <td>{{forloop.counter}}</td>-->
+<!--                <td>{{i1.young_name}}</td>-->
+<!--                <td>{{i1.college_name}}</td>-->
+<!--                <td>{{i1.field_name}}</td>-->
+<!--            </tr>-->
+<!--            {% endfor %}-->
+        </table>
+    </div>
+    </div>
+</body>
+<script>
+
+
+    var g_leader_data = new Array();
+    var g_young_data = new Array();
+
+<!--    console.log(g_leader_data);-->
+<!--    console.log(g_young_data);-->
+
+    //console.log(g_leader_data);
+    //定义全局变量
+    var vt = new Vue({
+                    delimiters:['[[',']]'],
+                    el: '#main',
+                    data: {
+                            rows_leader: g_leader_data,
+                            rows_young: g_young_data
+                    },
+                    created: function()
+                    {
+                        var arr = this;
+                        arr.rows_leader = g_leader_data;
+                        arr.rows_young = g_young_data;
+                        console.log(arr.rows_leader);
+                    },
+                    methods:{
+                        addData:function(data, selected)
+                        {
+                            for(var i = 0; i < data.length; i++)
+                            {
+                                if(selected == 1)
+                                    this.rows_leader.push(data[i]);
+                                else
+                                    this.rows_young.push(data[i]);
+                            }
+                            //console.log(this.rows_leader);
+                            console.log(this.rows_young);
+                        },
+                        deleteAllData:function(selected)
+                        {
+                            if(selected == 1)
+                                this.rows_leader = [];
+                            else
+                                this.rows_young = [];
+                        }
+                    }
+                    
+    });
+    $(document).ready(function () {
+        var leader = {{leader | safe}};
+        var young = {{young | safe}};
+
+        for(var i=0; i<leader.length; i++){
+                        var ele = leader[i];
+                        g_leader_data.push(ele);
+                }
+
+        for(var i=0; i<young.length; i++){
+                        var ele = young[i];
+                        g_young_data.push(ele);
+                }
+        set_combobox(g_leader_data, "select_leader");
+        set_combobox(young, "select_young");
+    });
+<!--    $(document).ready(function () {-->
+<!--        $.getJSON("load_execl_py\\leader_China.json", function (result, status) {-->
+<!--            for(var i=0; i<result.length; i++){-->
+<!--                    var ele = result[i];-->
+<!--                    g_leader_data.push(ele);-->
+<!--            }-->
+<!--            set_combobox(result, "select_leader");-->
+<!--        });-->
+<!--        $.getJSON("load_execl_py\\young_China.json", function (result, status) {-->
+<!--            for(var i=0; i<result.length; i++){-->
+<!--                    var ele = result[i];-->
+<!--                    g_young_data.push(ele);-->
+<!--            }-->
+<!--            set_combobox(result, "select_young");-->
+<!--            -->
+<!--        });-->
+<!--    });-->
+
+
+    
+    function select_func(val, selected) {
+            var m_g_data;
+            if(selected == 1)
+                m_g_data = g_leader_data;
+            else    
+                m_g_data = g_young_data;
+            var data = [];
+            if(val == "All School")
+            {
+                vt.deleteAllData(selected);
+                vt.addData(m_g_data, selected);
+                console.log('All School');
+            }
+            else{
+                for(var i=0; i<m_g_data.length; i++){
+                        var ele = m_g_data[i];
+                        if(ele.college_name == val){
+                            data.push(ele);
+                            //console.log(ele.college_name);
+                    }
+                }
+                vt.deleteAllData(selected);
+                vt.addData(data, selected);
+                //console.log(data);
+            }
+        }
+
+        function set_combobox(result, selected_id){
+            //console.log(result);
+            //设置工作单位的下拉列表
+            var work_units = new Array();
+            //为数组添加不重复元素添加的方法
+            Array.prototype.pushNoRepeat = function(){
+                for(var i=0; i<arguments.length; i++){
+                    var ele = arguments[i];
+                    if(this.indexOf(ele) == -1){
+                        this.push(ele);
+                    }
+                }
+            };
+            for(var i=0; i<result.length; i++){
+                    var ele = result[i];
+                    work_units.pushNoRepeat(ele.college_name);
+            }
+
+            work_units.sort(function(a,b){
+                return a.localeCompare(b);
+            });
+            //console.log(work_units);
+            //创建青年人才的option
+            for(var i=0; i<work_units.length; i++){
+                    var ele = work_units[i];
+                    var y=document.createElement('option');
+                    y.text=ele;
+                    var x=document.getElementById(selected_id);
+                    try
+                    {
+                        x.add(y,null); // standards compliant
+                    }
+                    catch(ex)
+                    {
+                        x.add(y); // IE only
+                    }
+            }
+    }
+
+</script>
+ 
+</html>

@@ -1,0 +1,151 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>上传excel</title>-->
+<!--   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">-->
+<!--  <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>-->
+<!--  <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="modal modal-default fade" id="modal-class">-->
+<!--        <div class="modal-dialog">-->
+<!--          <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--              <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                <span aria-hidden="true">×</span></button>-->
+<!--              <h4 class="modal-title">上传用例文件</h4>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--              <form class="form-group" enctype="multipart/form-data" method="post" action="/caseExcelImport/{{ case_class_one.id }}">-->
+<!--                {% csrf_token %}-->
+<!--                {{ ff.as_p }}-->
+<!--                <p class="help-block">请求确保文件格式正确 .</p>-->
+<!--                <p class="help-block">用例模块文件可下载 .</p>-->
+<!--                <a href="/download/template" class="btn btn-default">-->
+<!--                  <i class="fa fa-download"> 下载</i>-->
+<!--                </a>-->
+<!--                <p class="help-block">excel格式的文件 .</p>-->
+<!--                <p class="help-block">文件中小模块一栏填入最终所属测试模块 .</p>-->
+<!--                <input type="submit" class="btn btn-default" value="上传"/>-->
+<!--                <button type="button" class="btn btn-default pull-right" data-dismiss="modal">取消</button>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--<div class="row">-->
+<!--        <div class="col-xs-12">-->
+<!--          <div class="box">-->
+<!--            <div class="box-header">-->
+<!--              <h3 class="box-title">用例模块：{{ case_class_one.name }}</h3>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; /.box-header &ndash;&gt;-->
+<!--            <div class="box-body">-->
+<!--              <p>-->
+<!--                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-class" data-id="{{ case_class_one.id }}">-->
+<!--                  <i class="fa fa-caret-square-o-right"> 导入</i>-->
+<!--                </button>-->
+<!--              </p>-->
+<!--              <table id="testcase" class="table table-bordered table-striped">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                  <th>用例编号</th>-->
+<!--                  <th>用例名称</th>-->
+<!--                  <th>用例等级</th>-->
+<!--                  <th>期望结果</th>-->
+<!--                  <th>操作按钮</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                {% for case in cases %}-->
+<!--                <tr>-->
+<!--                  <td>{{ case.code }}</td>-->
+<!--                  <td>{{ case.name }}</td>-->
+<!--                  <td>Level {{ case.level }}</td>-->
+<!--                  <td>{{ case.expected_result }}</td>-->
+<!--                  <td>-->
+<!--                    <a href="/caseInfo/{{ case_class_one.id }}/{{ case.case_id }}" >-->
+<!--                      <i class="fa fa-folder-open"> 查看</i>-->
+<!--                    </a>-->
+<!--                  </td>-->
+<!--                </tr>-->
+<!--                {% endfor %}-->
+<!--                </tbody>-->
+<!--              </table>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; /.box-body &ndash;&gt;-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上传excel</title>
+       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+      <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+      <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <form method="post" action="/country/up_excel/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1>请上传文件</h1>
+        请选择上传excel中sheet的序号：&#12288;<input type="number" name="index" min="1" max="10" value="1"/><br>
+
+        请选择学科：<select name="subject" >
+                                        <option value="机械工程">机械工程</option>
+                                        <option value="土木工程">土木工程</option>
+                                        <option value="交通运输">交通运输</option>
+                                        <option value="电气工程">电气工程</option>
+                                        <option value="信息与通信工程">信息与通信工程</option>
+                                        <option value="计算机科学与技术">计算机科学与技术</option>
+                                        <option value="管理科学与工程">管理科学与工程</option>
+                                        <option value="工商管理">工商管理</option>
+                                        <option value="材料科学与工程">材料科学与工程</option>
+                                        <option value="测绘科学与工程">测绘科学与工程</option>
+                                        <option value="力学">力学</option>
+                                    </select><br>
+        请上传文件:&ensp;<input type="file" name="files"><br>
+        <input type="submit" value="上传">
+        <br>
+        <b><small>文件上传执行结果(数据库保存结果)：</small></b><hr>
+    </form>
+    <table border="1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <td>序号</td>
+                <td>国家</td>
+                <td>领导人才名</td>
+                <td>青年人才名</td>
+                <td>工作单位</td>
+                <td>研究领域或方向</td>
+                <td>学科</td>
+            </tr>
+             {% for i in data %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.cname}}</td>
+                <td>{{i.lead_name}}</td>
+                <td>{{i.young_name}}</td>
+                <td>{{i.college_name}}</td>
+                <td>{{i.field_name}}</td>
+                <td>{{i.subject_name}}</td>
+            </tr>
+            {% endfor %}
+        </thead>
+        <tbody>
+
+
+        </tbody>
+    </table>
+
+
+</body>
+</html>

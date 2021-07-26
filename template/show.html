@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+table {
+    border-collapse: collapse;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+</style>
+</head>
+    <body>
+        <table border="1">
+        <tr>
+        <th>序号</th>
+        <th>国家</th>
+        <th>领军人才</th>
+        <th>青年人才</th>
+        <th>学校</th>
+        <th>学科</th>
+        <th>研究领域</th>
+        </tr>
+
+        {% for i in cou %}
+                <tr>
+                   <td>{{forloop.counter}}</td>
+                   <td>{{i.cname}}</td>
+                   <td>{{i.lead_name}}</td>
+                   <td>{{i.young_name}}</td>
+                   <td>{{i.college_name}}</td>
+                   <td>{{i.subject_name}}</td>
+                   <td>{{i.field_name}}</td>
+                </tr>
+        {% endfor %}
+        </table>
+    </body>
+</html>
